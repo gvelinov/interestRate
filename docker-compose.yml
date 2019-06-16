@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile-db
+    volumes:
+      - ./db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: SECRET123
+      MYSQL_DATABASE: app
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: changeme
+    ports:
+      - "3306:3306"
+
+  app:
+    build: .
+    privileged: true
+    depends_on:
+      - db
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "8088:80"
+
+volumes:
+  db_data: {}
