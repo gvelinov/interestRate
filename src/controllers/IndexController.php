@@ -1,11 +1,15 @@
 <?php
+namespace App\Controllers;
 
 use Phalcon\Mvc\Controller;
+use App\Models\Transactions;
+use App\Models\Users;
 
 class IndexController extends Controller
 {
     public function indexAction()
     {
+        // If it's post we create new transaction
         if ($this->request->isPost()) {
 
             $transaction = new Transactions();
@@ -13,7 +17,7 @@ class IndexController extends Controller
             // Store and check for errors
             $success = $transaction->save(
                 [
-                    'accountIDs' => $this->request->getPost('account'),
+                    'accountID' => $this->request->getPost('account'),
                     'amount' => $this->request->getPost('amount'),
                     'type' => 'deposit'
                 ]

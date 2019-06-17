@@ -1,6 +1,8 @@
 <?php
+namespace App\Controllers;
 
 use Phalcon\Mvc\Controller;
+use App\Models\Accounts;
 
 
 class AjaxController extends Controller
