@@ -11,6 +11,8 @@ class RateService
      */
     public function calculate(array $data): void
     {
+        $this->transactions = null;
+
         if (!empty($data)) {
             $this->transactionAggregate($data);
             $this->rateCalculation();
@@ -23,6 +25,7 @@ class RateService
     private function transactionAggregate(array $data): void
     {
         foreach ($data as $record) {
+            isset($this->transactions[$record['accountID']]['dayDepositsSum']) ? null : $this->transactions[$record['accountID']]['dayDepositsSum'] = 0;
             $this->transactions[$record['accountID']]['dayDepositsSum'] += $record['amount'];
         }
     }
