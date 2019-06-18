@@ -11,8 +11,10 @@ class RateService
      */
     public function calculate(array $data): void
     {
-        $this->transactionAggregate($data);
-        $this->rateCalculation();
+        if (!empty($data)) {
+            $this->transactionAggregate($data);
+            $this->rateCalculation();
+        }
     }
 
     /**
@@ -40,6 +42,6 @@ class RateService
      */
     public function getTransactions(): array
     {
-        return $this->transactions;
+        return $this->transactions ?? [];
     }
 }
