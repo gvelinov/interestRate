@@ -1,15 +1,66 @@
 <div class="row m-3">
     <div class="col-lg-12">
-        <form class="form-inline">
-            <span>Calculate Rates: </span>
-            <button type="submit" class="btn btn-primary">Start</button>
-        </form>
+        <span>Calculate Rates: </span>
+        <button type="submit" id="calculate" class="btn btn-primary">Start</button>
     </div>
 </div>
 <div class="row m-4">
     <div class="col-lg-12">
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-    </div>
+        <table class="table" id="tableResults">
+            <caption>Results</caption>
+            <thead>
+            <tr>
+                <th scope="col">All Deposits</th>
+                <th scope="col">Rate of the deposits</th>
+                <th scope="col">All Deposits (USD)</th>
+                <th scope="col">Rate of the deposits (USD)</th>
+            </tr>
+            </thead>
+            <tbody id="bodyRes">
+            </tbody>
+        </table>
+        <p id="usd"></p>
     </div>
 </div>
+
+
+<script>
+    $(document).ready(function () {
+
+
+        jQuery('#calculate').on('click', function (event) {
+            event.preventDefault();
+            jQuery(this).prop("disabled", true);
+            jQuery(this).html(
+                `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+            );
+            jQuery('#tableResults > tbody').html("");
+            jQuery('#usd').html("");
+
+            $.get("calculate", function (data) {
+                var deposits = 0;
+                var rates = 0;
+                var depositsUSD = 0;
+                var ratesUSD = 0;
+
+                jQuery('#usd').html('<span class="badge badge-secondary">USD rate: ' + data.exchangeRate + '</span>');
+                delete data['exchangeRate'];
+                jQuery.each(data, function (i, row) {
+                    deposits += row.dayDepositsSum;
+                    rates += row.rates;
+                    depositsUSD += row.dayDepositsSumUSD;
+                    ratesUSD += row.ratesUSD;
+                });
+                jQuery('#tableResults > tbody:last-child').append('<tr>' +
+                    '<td>' + deposits + '</td>' +
+                    '<td>' + rates + '</td>' +
+                    '<td>' + depositsUSD + '</td>' +
+                    '<td>' + ratesUSD + '</td>' +
+                    '</tr>');
+            }).always(function() {
+                jQuery('#calculate').prop("disabled", false);
+                jQuery('#calculate').html('Start');
+            });
+        });
+    });
+</script>

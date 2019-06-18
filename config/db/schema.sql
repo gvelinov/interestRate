@@ -34,3 +34,13 @@ CREATE TABLE IF NOT EXISTS `transactions` (
     PRIMARY KEY (`id`)
 );
 
+CREATE TABLE IF NOT EXISTS `configs` (
+    `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+    `name` CHAR(20) UNIQUE NOT NULL,
+    `value` CHAR(20) NOT NULL,
+
+    INDEX (`name`),
+    PRIMARY KEY (`id`)
+);
+
+INSERT IGNORE INTO `configs` (`id`, `name`, `value`) VALUES (1, 'transaction_lock', '0');
